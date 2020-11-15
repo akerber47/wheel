@@ -1,10 +1,7 @@
 
-BINS=hello.out
+BINS=hello sort
 
 all: $(BINS)
-
-hello.out: hello/main.o
-	$(CXX) $(CXXFLAGS) -o hello.out hello/main.o
 
 CXX=clang++
 CXXFLAGS=--std=c++17 -g
@@ -13,4 +10,4 @@ LINK.o=$(LINK.cc)
 
 
 clean:
-	rm -f $(BINS) hello/*.o
+	rm -f $(BINS) *.o
