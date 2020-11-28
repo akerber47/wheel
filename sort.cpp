@@ -4,7 +4,10 @@
 #include <cassert>
 #include <algorithm>
 
-void bubble_sort(std::vector<int> &a) {
+template <typename T> concept Ord =
+  requires (T a, T b) { a < b; };
+
+template <Ord T> void bubble_sort(std::vector<T> &a) {
   for (int i = a.size() - 1; i >= 1; --i) {
     for (int j = i; j >= 1; --j) {
       if (a[j] < a[j-1]) {
@@ -16,7 +19,7 @@ void bubble_sort(std::vector<int> &a) {
   }
 }
 
-void insertion_sort(std::vector<int> &a) {
+template <Ord T> void insertion_sort(std::vector<T> &a) {
   for (int i = 1; i < a.size(); ++i) {
     int tmp = a[i];
     int j;
@@ -28,7 +31,10 @@ void insertion_sort(std::vector<int> &a) {
 }
 
 // Print helper
-template <typename T> void pv(const std::vector<T> &v) {
+template <typename T> concept Printable =
+  requires (T a) { std::cout << a; };
+
+template <Printable T> void pv(const std::vector<T> &v) {
   std::cout << "[";
   for (auto x = v.begin(); x != v.end(); x++) {
     std::cout << *x;
@@ -72,8 +78,8 @@ int main() {
   std::vector<int> v0 = {5};
   std::vector<int> v1 = {5, 1, 3, 4, 2};
   std::vector<int> v2 = {5, 1, 10, 3, 4, 2, 25, 5, 8};
-  test_sort(bubble_sort, v0, "bubble_sort");
-  test_sort(bubble_sort, v1, "bubble_sort");
-  test_sort(bubble_sort, v2, "bubble_sort");
+  test_sort(bubble_sort<int>, v0, "bubble_sort");
+  test_sort(bubble_sort<int>, v1, "bubble_sort");
+  test_sort(bubble_sort<int>, v2, "bubble_sort");
   return 0;
 }
