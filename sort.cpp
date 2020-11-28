@@ -8,8 +8,8 @@ template <typename T> concept Ord =
   requires (T a, T b) { a < b; };
 
 template <Ord T> void bubble_sort(std::vector<T> &a) {
-  for (int i = a.size() - 1; i >= 1; --i) {
-    for (int j = i; j >= 1; --j) {
+  for (int i = 0; i < a.size(); ++i) {
+    for (int j = a.size() - 1; j > i; --j) {
       if (a[j] < a[j-1]) {
         int tmp = a[j];
         a[j] = a[j-1];
@@ -81,5 +81,8 @@ int main() {
   test_sort(bubble_sort<int>, v0, "bubble_sort");
   test_sort(bubble_sort<int>, v1, "bubble_sort");
   test_sort(bubble_sort<int>, v2, "bubble_sort");
+  test_sort(insertion_sort<int>, v0, "insertion_sort");
+  test_sort(insertion_sort<int>, v1, "insertion_sort");
+  test_sort(insertion_sort<int>, v2, "insertion_sort");
   return 0;
 }
