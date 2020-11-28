@@ -2,8 +2,9 @@
 #include <string>
 #include <iostream>
 #include <cassert>
+#include <algorithm>
 
-void bubble_sort(std::vector<int> a) {
+void bubble_sort(std::vector<int> &a) {
   for (int i = a.size() - 1; i >= 1; --i) {
     for (int j = i; j >= 1; --j) {
       if (a[j] < a[j-1]) {
@@ -15,7 +16,7 @@ void bubble_sort(std::vector<int> a) {
   }
 }
 
-void insertion_sort(std::vector<int> a) {
+void insertion_sort(std::vector<int> &a) {
   for (int i = 1; i < a.size(); ++i) {
     int tmp = a[i];
     int j;
@@ -34,17 +35,45 @@ template <typename T> void pv(const std::vector<T> &v) {
     if (x+1 != v.end())
       std::cout << ",";
   }
-  std::cout << "]" << std::endl;
+  std::cout << "]";
 }
+
+void test_sort(
+    void (*sort_func)(std::vector<int> &),
+    const std::vector<int> &in,
+    std::string name)
+{
+  auto exp = in, act = in;
+  std::sort(exp.begin(), exp.end());
+  sort_func(act);
+  std::string res;
+  if (exp == act) {
+    res = "Passed! ";
+  }
+  else {
+    res = "Failed! ";
+  }
+  std::cout << res << name << "(";
+  pv<int>(in);
+  std::cout << ")" << std::endl;
+
+  if (exp != act) {
+    std::cout << "  expected: ";
+    pv<int>(exp);
+    std::cout << std::endl;
+    std::cout << "    actual: ";
+    pv<int>(act);
+    std::cout << std::endl;
+  }
+}
+
 
 int main() {
   std::vector<int> v0 = {5};
   std::vector<int> v1 = {5, 1, 3, 4, 2};
   std::vector<int> v2 = {5, 1, 10, 3, 4, 2, 25, 5, 8};
-  auto v0_1 = v0;
-  assert(v0_1 == v0);
-  pv<int>(v0);
-  pv<int>(v1);
-  pv<int>(v2);
+  test_sort(bubble_sort, v0, "bubble_sort");
+  test_sort(bubble_sort, v1, "bubble_sort");
+  test_sort(bubble_sort, v2, "bubble_sort");
   return 0;
 }

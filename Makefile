@@ -4,7 +4,7 @@ BINS=hello sort
 all: $(BINS)
 
 CXX=clang++
-CXXFLAGS=--std=c++20 -g
+CXXFLAGS=--std=c++20 -g -Wall -Wextra
 # Use C++ to link .o files
 LINK.o=$(LINK.cc)
 
