@@ -11,7 +11,7 @@ template <Ord T> void bubble_sort(std::vector<T> &a) {
   for (int i = 0; i < a.size(); ++i) {
     for (int j = a.size() - 1; j > i; --j) {
       if (a[j] < a[j-1]) {
-        int tmp = a[j];
+        T tmp = a[j];
         a[j] = a[j-1];
         a[j-1] = tmp;
       }
@@ -21,12 +21,54 @@ template <Ord T> void bubble_sort(std::vector<T> &a) {
 
 template <Ord T> void insertion_sort(std::vector<T> &a) {
   for (int i = 1; i < a.size(); ++i) {
-    int tmp = a[i];
+    T tmp = a[i];
     int j;
     for (j = i-1; tmp < a[j] && j >= 0; --j) {
       a[j+1] = a[j];
     }
     a[j+1] = tmp;
+  }
+}
+
+template <Ord T> void heap_sort(std::vector<T> &a) {
+  // build max heap (largest at top)
+  for (int i = 1; i < a.size(); ++i) {
+    bool done = false;
+    for (int j = i; !done && j > 0; ) {
+      int pj = (j - 1) / 2;
+      if (a[pj] < a[j]) {
+        T tmp = a[j];
+        a[j] = a[pj];
+        a[pj] = tmp;
+        j = pj;
+      } else {
+        done = true;
+      }
+    }
+  }
+
+  // extract from heap
+  for (int i = a.size() - 1; i > 0; --i) {
+    T tmp = a[i];
+    a[i] = a[0];
+    a[0] = tmp;
+    bool done = false;
+    for (int j = 0; !done && j < i; ) {
+      int jl = j * 2 + 1, jr = j * 2 + 2;
+      if (jr < i && a[j] < a[jr] && a[jl] < a[jr]) {
+        T tmp = a[j];
+        a[j] = a[jr];
+        a[jr] = tmp;
+        j = jr;
+      } else if (jl < i && a[j] < a[jl]) {
+        T tmp = a[j];
+        a[j] = a[jl];
+        a[jl] = tmp;
+        j = jl;
+      } else {
+        done = true;
+      }
+    }
   }
 }
 
@@ -75,14 +117,25 @@ void test_sort(
 
 
 int main() {
+  std::vector<int> v = {};
   std::vector<int> v0 = {5};
   std::vector<int> v1 = {5, 1, 3, 4, 2};
   std::vector<int> v2 = {5, 1, 10, 3, 4, 2, 25, 5, 8};
+  std::vector<int> v3 = {1, 3, 2, 5, 4, 7, 6, 9, 8, 10};
+  test_sort(bubble_sort<int>, v, "bubble_sort");
   test_sort(bubble_sort<int>, v0, "bubble_sort");
   test_sort(bubble_sort<int>, v1, "bubble_sort");
   test_sort(bubble_sort<int>, v2, "bubble_sort");
+  test_sort(bubble_sort<int>, v3, "bubble_sort");
+  test_sort(insertion_sort<int>, v, "insertion_sort");
   test_sort(insertion_sort<int>, v0, "insertion_sort");
   test_sort(insertion_sort<int>, v1, "insertion_sort");
   test_sort(insertion_sort<int>, v2, "insertion_sort");
+  test_sort(insertion_sort<int>, v3, "insertion_sort");
+  test_sort(heap_sort<int>, v, "heap_sort");
+  test_sort(heap_sort<int>, v0, "heap_sort");
+  test_sort(heap_sort<int>, v1, "heap_sort");
+  test_sort(heap_sort<int>, v2, "heap_sort");
+  test_sort(heap_sort<int>, v3, "heap_sort");
   return 0;
 }
