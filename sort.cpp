@@ -72,6 +72,43 @@ template <Ord T> void heap_sort(std::vector<T> &a) {
   }
 }
 
+template <Ord T> void merge_sort_helper(
+    std::vector<T> &v,
+    int start,
+    int end) {
+  if (end - start <= 1) {
+    return;
+  }
+  int mid = (start + end) / 2;
+  merge_sort_helper(v, start, mid);
+  merge_sort_helper(v, mid, end);
+  std::vector<T> out;
+  int i1, i2;
+  for (i1 = start, i2 = mid; i1 < mid && i2 < end; ) {
+    if (v[i1] < v[i2]) {
+      out.push_back(v[i1]);
+      ++i1;
+    } else {
+      out.push_back(v[i2]);
+      ++i2;
+    }
+  }
+  for (; i1 < mid; i1++) {
+    out.push_back(v[i1]);
+  }
+  for (; i2 < end; i2++) {
+    out.push_back(v[i2]);
+  }
+
+  for (int i = 0; i < end - start; i++) {
+    v[start + i] = out[i];
+  }
+}
+
+template <Ord T> void merge_sort(std::vector<T> &a) {
+  merge_sort_helper(a, 0, a.size());
+}
+
 // Print helper
 template <typename T> concept Printable =
   requires (T a) { std::cout << a; };
@@ -89,8 +126,7 @@ template <Printable T> void pv(const std::vector<T> &v) {
 void test_sort(
     void (*sort_func)(std::vector<int> &),
     const std::vector<int> &in,
-    std::string name)
-{
+    std::string name) {
   auto exp = in, act = in;
   std::sort(exp.begin(), exp.end());
   sort_func(act);
@@ -137,5 +173,10 @@ int main() {
   test_sort(heap_sort<int>, v1, "heap_sort");
   test_sort(heap_sort<int>, v2, "heap_sort");
   test_sort(heap_sort<int>, v3, "heap_sort");
+  test_sort(merge_sort<int>, v, "merge_sort");
+  test_sort(merge_sort<int>, v0, "merge_sort");
+  test_sort(merge_sort<int>, v1, "merge_sort");
+  test_sort(merge_sort<int>, v2, "merge_sort");
+  test_sort(merge_sort<int>, v3, "merge_sort");
   return 0;
 }
