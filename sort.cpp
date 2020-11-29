@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cassert>
 #include <algorithm>
+#include "common.h"
 
 template <typename T> concept Ord =
   requires (T a, T b) { a < b; };
@@ -150,18 +151,18 @@ template <Ord T> void quick_sort(std::vector<T> &a) {
   quick_sort_helper(a, 0, a.size());
 }
 
-// Print helper
-template <typename T> concept Printable =
-  requires (T a) { std::cout << a; };
-
-template <Printable T> void pv(const std::vector<T> &v) {
-  std::cout << "[";
-  for (auto x = v.begin(); x != v.end(); x++) {
-    std::cout << *x;
-    if (x+1 != v.end())
-      std::cout << ",";
+void counting_sort(std::vector<int> &a, int min, int max) {
+  std::vector<int> counts(max - min, 0);
+  for (auto x: a) {
+    counts[x - min]++;
   }
-  std::cout << "]";
+  for (int ai = 0, i = min; i < max; i++) {
+    while (counts[i] > 0) {
+      a[ai] = i;
+      counts[i]--;
+      ai++;
+    }
+  }
 }
 
 void test_sort(
