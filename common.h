@@ -44,3 +44,9 @@ void dbg(std::string tag, int x) {
 void dbg(std::string tag, std::vector<int> v) {
   do_debugv<int>(tag, v);
 }
+
+// Other helpers/utilities
+
+template <typename T> concept Ord =
+  requires (T a, T b) { a < b; };
+

@@ -5,9 +5,6 @@
 #include <algorithm>
 #include "common.h"
 
-template <typename T> concept Ord =
-  requires (T a, T b) { a < b; };
-
 template <Ord T> void bubble_sort(std::vector<T> &a) {
   for (int i = 0; i < a.size(); ++i) {
     for (int j = a.size() - 1; j > i; --j) {
