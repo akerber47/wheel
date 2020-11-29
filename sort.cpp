@@ -225,5 +225,15 @@ int main() {
   test_sort(quick_sort<int>, v1, "quick_sort");
   test_sort(quick_sort<int>, v2, "quick_sort");
   test_sort(quick_sort<int>, v3, "quick_sort");
+  test_sort([](auto a){ counting_sort(a, 0, 25); },
+      v, "counting_sort");
+  test_sort([](auto a){ counting_sort(a, 0, 25); },
+      v0, "counting_sort");
+  test_sort([](auto a){ counting_sort(a, 0, 25); },
+      v1, "counting_sort");
+  test_sort([](auto a){ counting_sort(a, 0, 50); },
+      v2, "counting_sort");
+  test_sort([](auto a){ counting_sort(a, 0, 25); },
+      v3, "counting_sort");
   return 0;
 }
