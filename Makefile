@@ -1,5 +1,5 @@
 
-BINS=hello sort
+BINS=hello sort list hashtable
 
 all: $(BINS)
 
