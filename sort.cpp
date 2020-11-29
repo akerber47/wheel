@@ -109,6 +109,47 @@ template <Ord T> void merge_sort(std::vector<T> &a) {
   merge_sort_helper(a, 0, a.size());
 }
 
+template <Ord T> void quick_sort_helper(
+    std::vector<T> &v,
+    int start,
+    int end) {
+  // std::cout << "qs: start = " << start << ", end = " << end << std::endl;
+  if (end - start <= 1) {
+    return;
+  }
+  int pivot = start;
+  int i, j;
+  for (i = start + 1, j = end - 1; i < j; ) {
+    // std::cout << "qs: loop i = " << i << ", j = " << j << std::endl;
+    if (v[j] < v[pivot] && v[pivot] < v[i]) {
+      T tmp = v[i];
+      v[i] = v[j];
+      v[j] = tmp;
+      ++i;
+      --j;
+    } else if (!(v[pivot] < v[i])) {
+      ++i;
+    } else if (!(v[j] < v[pivot])) {
+      --j;
+    }
+  }
+  int new_pivot = i;
+  if (v[i] < v[pivot]) {
+    new_pivot = i;
+  } else {
+    new_pivot = i - 1;
+  }
+  T tmp = v[pivot];
+  v[pivot] = v[new_pivot];
+  v[new_pivot] = tmp;
+  quick_sort_helper(v, start, new_pivot);
+  quick_sort_helper(v, new_pivot + 1, end);
+}
+
+template <Ord T> void quick_sort(std::vector<T> &a) {
+  quick_sort_helper(a, 0, a.size());
+}
+
 // Print helper
 template <typename T> concept Printable =
   requires (T a) { std::cout << a; };
@@ -178,5 +219,10 @@ int main() {
   test_sort(merge_sort<int>, v1, "merge_sort");
   test_sort(merge_sort<int>, v2, "merge_sort");
   test_sort(merge_sort<int>, v3, "merge_sort");
+  test_sort(quick_sort<int>, v, "quick_sort");
+  test_sort(quick_sort<int>, v0, "quick_sort");
+  test_sort(quick_sort<int>, v1, "quick_sort");
+  test_sort(quick_sort<int>, v2, "quick_sort");
+  test_sort(quick_sort<int>, v3, "quick_sort");
   return 0;
 }
